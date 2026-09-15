@@ -38,6 +38,10 @@
             --text-important: #dc2626;     /* 紅字強調 */
         }
 
+        html {
+            scroll-behavior: smooth; /* 平滑滾動 */
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
             color: var(--text-main);
@@ -311,6 +315,47 @@
         }
 
         /* ==========================================
+           回到頂端按鈕 (Back to Top Button)
+           ========================================== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--primary-dark);
+            color: #ffffff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.show {
+            opacity: 0.9;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            opacity: 1;
+            background-color: var(--primary-blue);
+            transform: translateY(-3px);
+        }
+
+        .back-to-top svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        /* ==========================================
            列印最佳化 (Print Media Queries)
            ========================================== */
         @media print {
@@ -325,7 +370,7 @@
                 max-width: 100%;
             }
 
-            .tab-nav {
+            .tab-nav, .back-to-top {
                 display: none !important;
             }
 
@@ -599,11 +644,11 @@
                     <h3>一、 時效規範與申報管道（黃金時效）</h3>
                     <p>上市櫃及興櫃公司發生對股價或股東權益有重大影響之事項時，應於事實發生日、媒體報導日、董事會決議日或簽約日<span class="text-important">次日開盤前 2 小時內（或事實發生後 24 小時內）</span>，將重大訊息輸入金管會指定之「公開資訊觀測站（MOPS）」。</p>
 
-                    <h3></strong> <span class="text-important">二、 常見重大訊息應申報事由（證交所作業程序第 4 條全範疇）</h3></span>
+                    <h3>二、 常見重大訊息應申報事由（證交所作業程序第 4 條全範疇）</h3>
                     <ul>
                         <li><strong>公司營運重大變更：</strong> 發生重大災害、停工或復工、退票、聲請重整、破產、清算、解散、或主要客戶/供應商終止業務契約。</li>
-                        <li><strong>財務資產重大異動：</strong> 取得或處分資產達公告標準、資金贷與或背書保證超限或異動、辦理私募或公開增資發行新股、發行公司債或轉換公司債。</li>
-                        <li><strong>公司治理與內部人異動：董事長、總經理、獨立董事、內部稽核主管、財務主管、會計主管、研發主管或簽證會計師異動；董監事過半數異動或三分之一獨立董事解任。</li>
+                        <li><strong>財務資產重大異動：</strong> 取得或處分資產達公告標準、資金貸與或背書保證超限或異動、辦理私募或公開增資發行新股、發行公司債或轉換公司債。</li>
+                        <li><strong>公司治理與內部人異動：</strong> 董事長、總經理、獨立董事、內部稽核主管、財務主管、會計主管、研發主管或簽證會計師異動；董監事過半數異動或三分之一獨立董事解任。</li>
                         <li><strong>股東權益與股利政策：</strong> 董事會決議擬議盈餘分派或虧損撥補、減資、公司併購、分割、股份轉讓/交換、收購或終止上市/上櫃買賣。</li>
                         <li><strong>司法訴訟與行政處分：</strong> 公司、負責人或大股東涉及重大訴訟、非訟事件、金管會行政處分、假扣押或遭檢調機關進行搜索扣押。</li>
                     </ul>
@@ -690,8 +735,16 @@
 
     </div>
 
-    <!-- JavaScript 分頁切換邏輯 -->
+    <!-- 回到頂端浮動按鈕 -->
+    <button id="backToTopBtn" class="back-to-top" onclick="scrollToTop()" title="回到頂端" aria-label="回到頂端">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 4l-8 8h5v8h6v-8h5z"/>
+        </svg>
+    </button>
+
+    <!-- JavaScript 邏輯 (分頁切換 + 回到頂端偵測) -->
     <script>
+        // 分頁切換邏輯
         function switchTab(tabId) {
             const buttons = document.querySelectorAll('.tab-btn');
             const contents = document.querySelectorAll('.tab-content');
@@ -706,6 +759,24 @@
                 document.getElementById(tabId).classList.add('active');
                 event.currentTarget.classList.add('active');
             }
+        }
+
+        // 回到頂端按鈕邏輯
+        const backToTopBtn = document.getElementById('backToTopBtn');
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
